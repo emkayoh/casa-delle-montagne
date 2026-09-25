@@ -1,13 +1,18 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <title>{% block title %}Soapbook{% endblock %}</title>
 
+    <link rel="stylesheet" href="{% static 'inventory/css/site.css' %}">
+
     {% block extra_head %}{% endblock %}
 </head>
 
 <body>
+
     <header>
         <h1>
             <a href="{% url 'inventory:product_list' %}">
@@ -16,20 +21,15 @@
         </h1>
 
         <nav>
-            <a href="{% url 'inventory:product_list' %}">
-                Products
-            </a>
-            |
-            <a href="/admin/">
-                Admin
-            </a>
+            <a href="{% url 'inventory:product_list' %}">Products</a>
+            <a href="/admin/inventory/ingredient/">Ingredients</a>
+            <a href="/admin/">Admin</a>
         </nav>
     </header>
-
-    <hr>
 
     <main>
         {% block content %}{% endblock %}
     </main>
+
 </body>
 </html>

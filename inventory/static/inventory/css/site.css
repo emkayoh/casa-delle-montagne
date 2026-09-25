@@ -1,0 +1,115 @@
+:root {
+    --bg: #f7f4ee;
+    --surface: #fffdf9;
+    --text: #2f2b26;
+    --muted: #746d63;
+    --line: #ddd5c8;
+    --accent: #6f7d5c;
+    --accent-dark: #536044;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+}
+
+header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    padding: 1rem 2rem;
+}
+
+header h1 {
+    margin: 0 0 0.5rem;
+    font-size: 1.8rem;
+    font-weight: normal;
+}
+
+header h1 a {
+    color: var(--text);
+    text-decoration: none;
+}
+
+nav a {
+    color: var(--accent-dark);
+    text-decoration: none;
+    margin-right: 1rem;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+main {
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+h2 {
+    font-weight: normal;
+    margin-top: 0;
+}
+
+ul {
+    padding-left: 1.2rem;
+}
+
+a {
+    color: var(--accent-dark);
+}
+
+button {
+    font: inherit;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: var(--accent-dark);
+}
+
+.label {
+    background: white;
+    border: 1px solid var(--line);
+    padding: 1.5rem;
+    max-width: 420px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.06);
+}
+
+.controls {
+    margin-bottom: 1rem;
+}
+
+@media print {
+    header,
+    .controls {
+        display: none;
+    }
+
+    body {
+        background: white;
+    }
+
+    main {
+        margin: 0;
+        padding: 0;
+        max-width: none;
+    }
+
+    .label {
+        border: none;
+        box-shadow: none;
+    }
+}
