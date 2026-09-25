@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ product.name }} — Label Preview
+{% endblock %}
+
+{% block extra_head %}
+<style>
+    .label {
+        border: 1px solid #999;
+        padding: 1rem;
+        max-width: 400px;
+    }
+
+    .controls {
+        margin-bottom: 1rem;
+    }
+
+    @media print {
+        header,
+        .controls {
+            display: none;
+        }
+
+        .label {
+            border: none;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="controls">
+    <a href="{% url 'inventory:product_list' %}">
+        Back to products
+    </a>
+
+    <button onclick="window.print()">
+        Print
+    </button>
+</div>
+
+<div class="label">
+    <h2>{{ product.name }}</h2>
+
+    {% if product.description %}
+        <p>{{ product.description }}</p>
+    {% endif %}
+
+    {% if product.nominal_weight_g %}
+        <p>
+            <strong>Weight:</strong>
+            {{ product.nominal_weight_g }} g
+        </p>
+    {% endif %}
+
+    <p>
+        <strong>Ingredients:</strong>
+        {% for item in recipe_ingredients %}
+            {{ item.ingredient.display_label_name }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+            No ingredients defined.
+        {% endfor %}
+    </p>
+</div>
+
+{% endblock %}
