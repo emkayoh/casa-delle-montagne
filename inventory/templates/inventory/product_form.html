@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if product.pk %}Edit {{ product.name }}{% else %}Add product{% endif %}
+— Soapbook
+{% endblock %}
+
+{% block content %}
+
+<h2>
+    {% if product.pk %}
+        Edit {{ product.name }}
+    {% else %}
+        Add product
+    {% endif %}
+</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <section>
+        <h3>Product</h3>
+        {{ form.as_p }}
+    </section>
+
+    <section>
+        <h3>Recipe</h3>
+
+        {{ formset.management_form }}
+
+        {% if formset.non_form_errors %}
+            {{ formset.non_form_errors }}
+        {% endif %}
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Ingredient</th>
+                    <th>Quantity</th>
+                    <th>Unit</th>
+                    <th>Label order</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for recipe_form in formset %}
+                    <tr>
+                        <td>
+                            {{ recipe_form.id }}
+                            {{ recipe_form.ingredient }}
+                            {{ recipe_form.ingredient.errors }}
+                        </td>
+
+                        <td>
+                            {{ recipe_form.quantity }}
+                            {{ recipe_form.quantity.errors }}
+                        </td>
+
+                        <td>
+                            {{ recipe_form.unit }}
+                            {{ recipe_form.unit.errors }}
+                        </td>
+
+                        <td>
+                            {{ recipe_form.label_order }}
+                            {{ recipe_form.label_order.errors }}
+                        </td>
+
+                        <td>
+                            {% if recipe_form.instance.pk %}
+                                {{ recipe_form.DELETE }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <p>
+        <button type="submit">Save product</button>
+
+        <a href="{% url 'inventory:product_list' %}">
+            Cancel
+        </a>
+    </p>
+</form>
+
+{% endblock %}

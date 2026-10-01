@@ -81,11 +81,56 @@ button:hover {
 }
 
 .label {
+    width: 139mm;
+    height: 99.1mm;
+    padding: 5mm;
+
+    display: grid;
+    grid-template-columns: 84mm 1fr;
+    gap: 5mm;
+
+    box-sizing: border-box;
     background: white;
+
     border: 1px solid var(--line);
-    padding: 1.5rem;
-    max-width: 420px;
     box-shadow: 0 2px 8px rgb(0 0 0 / 0.06);
+}
+.label-sheet {
+    width: 210mm;
+    height: 297mm;
+}
+.label-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.label-brand img {
+    width: 84mm;
+    height: 84mm;
+    object-fit: contain;
+}
+
+.label-product {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.label-product h2 {
+    margin: 0 0 4mm;
+    font-size: 18pt;
+    line-height: 1.05;
+}
+
+.ingredients {
+    font-size: 8.5pt;
+    line-height: 1.25;
+}
+
+.weight {
+    margin-top: auto;
+    font-size: 10pt;
 }
 
 .controls {
@@ -112,4 +157,60 @@ button:hover {
         border: none;
         box-shadow: none;
     }
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.button {
+    display: inline-block;
+    padding: 0.5rem 0.9rem;
+    background: var(--accent);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+}
+
+th,
+td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+}
+
+th {
+    font-weight: normal;
+    color: var(--muted);
+}
+
+input,
+select,
+textarea {
+    font: inherit;
+    padding: 0.4rem;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.brand-logo {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
 }

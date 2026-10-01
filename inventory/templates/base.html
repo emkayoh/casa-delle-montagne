@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <title>{% block title %}Soapbook{% endblock %}</title>
@@ -13,17 +14,21 @@
 
 <body>
 
+
     <header>
-        <h1>
-            <a href="{% url 'inventory:product_list' %}">
-                Soapbook
-            </a>
-        </h1>
+        <div class="brand">
+            <img src="{% static 'inventory/images/brand.png' %}" alt="Soapmaker logo" class="brand-logo">
+
+            <h1>
+                <a href="{% url 'inventory:product_list' %}">
+                    Soapbook
+                </a>
+            </h1>
+        </div>
 
         <nav>
             <a href="{% url 'inventory:product_list' %}">Products</a>
-            <a href="/admin/inventory/ingredient/">Ingredients</a>
-            <a href="/admin/">Admin</a>
+            <a href="{% url 'inventory:ingredient_list' %}">Ingredients</a>
         </nav>
     </header>
 
@@ -32,4 +37,5 @@
     </main>
 
 </body>
+
 </html>

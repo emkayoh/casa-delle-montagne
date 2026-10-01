@@ -17,28 +17,39 @@
     </button>
 </div>
 
+{% load static %}
+
 <div class="label">
-    <h2>{{ product.name }}</h2>
 
-    {% if product.description %}
-        <p>{{ product.description }}</p>
-    {% endif %}
+    <div class="label-brand">
+        <img
+            src="{% static 'inventory/images/brand.png' %}"
+            alt="Casa delle Montagne"
+        >
+    </div>
 
-    {% if product.nominal_weight_g %}
-        <p>
-            <strong>Weight:</strong>
-            {{ product.nominal_weight_g }} g
+    <div class="label-product">
+        <h2>{{ product.name }}</h2>
+
+        {% if product.description %}
+            <p class="label-description">
+                {{ product.description }}
+            </p>
+        {% endif %}
+
+        <p class="ingredients">
+            <strong>Ingredients</strong><br>
+            {% for item in recipe_ingredients %}
+                {{ item.ingredient.display_label_name }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
         </p>
-    {% endif %}
 
-    <p>
-        <strong>Ingredients:</strong>
-        {% for item in recipe_ingredients %}
-            {{ item.ingredient.display_label_name }}{% if not forloop.last %}, {% endif %}
-        {% empty %}
-            No ingredients defined.
-        {% endfor %}
-    </p>
+        {% if product.nominal_weight_g %}
+            <p class="weight">
+                Net wt. {{ product.nominal_weight_g }} g
+            </p>
+        {% endif %}
+    </div>
+
 </div>
-
 {% endblock %}

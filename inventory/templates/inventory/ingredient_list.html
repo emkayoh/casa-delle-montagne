@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}
+Ingredients — Soapbook
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h2>Ingredients</h2>
+
+    <a class="button" href="{% url 'inventory:ingredient_create' %}">
+        Add ingredient
+    </a>
+</div>
+
+{% if ingredients %}
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Label name</th>
+                <th>Unit</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for ingredient in ingredients %}
+                <tr>
+                    <td>{{ ingredient.name }}</td>
+
+                    <td>
+                        {{ ingredient.display_label_name }}
+                    </td>
+
+                    <td>{{ ingredient.get_stock_unit_display }}</td>
+
+                    <td>
+                        <a href="{% url 'inventory:ingredient_edit' ingredient.pk %}">
+                            Edit
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No ingredients have been added yet.</p>
+{% endif %}
+
+{% endblock %}
