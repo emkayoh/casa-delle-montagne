@@ -9,43 +9,53 @@
 
 <h2>
     {% if product.pk %}
-        Edit {{ product.name }}
+    Edit {{ product.name }}
     {% else %}
-        Add product
+    Add product
     {% endif %}
 </h2>
 
 <form method="post">
     {% csrf_token %}
 
-    <section>
-        <h3>Product</h3>
-        {{ form.as_p }}
-    </section>
+    <div class="product-editor">
 
-    <section>
-        <h3>Recipe</h3>
+        <section class="product-details">
+            <h3>Product</h3>
 
-        {{ formset.management_form }}
+            {{ form.as_p }}
+        </section>
 
-        {% if formset.non_form_errors %}
+        <section class="recipe-editor">
+
+            <div class="section-heading">
+                <h3>Recipe</h3>
+
+                <button type="button" class="button" onclick="openIngredientWindow()">
+                    New ingredient
+                </button>
+            </div>
+
+            {{ formset.management_form }}
+
+            {% if formset.non_form_errors %}
             {{ formset.non_form_errors }}
-        {% endif %}
+            {% endif %}
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Ingredient</th>
-                    <th>Quantity</th>
-                    <th>Unit</th>
-                    <th>Label order</th>
-                    <th>Remove</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for recipe_form in formset %}
+            <table>
+                <thead>
                     <tr>
+                        <th>Ingredient</th>
+                        <th>Quantity</th>
+                        <th>Unit</th>
+                        <th>Label order</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+
+                <tbody id="recipe-formset">
+                    {% for recipe_form in formset %}
+                    <tr class="recipe-row">
                         <td>
                             {{ recipe_form.id }}
                             {{ recipe_form.ingredient }}
@@ -68,23 +78,154 @@
                         </td>
 
                         <td>
-                            {% if recipe_form.instance.pk %}
-                                {{ recipe_form.DELETE }}
-                            {% endif %}
+                            
+                            {{ recipe_form.DELETE }}
+                            
                         </td>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </section>
+                    {% endfor %}
+                </tbody>
+            </table>
+<template id="recipe-empty-form">
+    <tr class="recipe-row">
+        <td>
+            {{ formset.empty_form.id }}
+            {{ formset.empty_form.ingredient }}
+        </td>
 
-    <p>
+        <td>
+            {{ formset.empty_form.quantity }}
+        </td>
+
+        <td>
+            {{ formset.empty_form.unit }}
+        </td>
+
+        <td>
+            {{ formset.empty_form.label_order }}
+        </td>
+
+        <td>
+            {{ formset.empty_form.DELETE }}
+        </td>
+    </tr>
+</template>
+        </section>
+
+
+    </div>
+
+    <div class="form-actions">
         <button type="submit">Save product</button>
 
         <a href="{% url 'inventory:product_list' %}">
             Cancel
         </a>
-    </p>
+    </div>
 </form>
+
+<script>
+const recipeTable = document.getElementById("recipe-formset");
+
+const totalForms = document.getElementById(
+    "id_{{ formset.prefix }}-TOTAL_FORMS"
+);
+
+const emptyRecipeForm =
+    document.getElementById("recipe-empty-form").innerHTML;
+
+
+function addRecipeRow() {
+    const index = parseInt(totalForms.value, 10);
+
+    const newRow = emptyRecipeForm.replace(
+        /__prefix__/g,
+        index
+    );
+
+    recipeTable.insertAdjacentHTML(
+        "beforeend",
+        newRow
+    );
+
+    totalForms.value = index + 1;
+}
+
+
+/*
+ * Whenever the final blank ingredient row is used,
+ * automatically create another blank row underneath it.
+ */
+recipeTable.addEventListener("change", function(event) {
+
+    if (!event.target.matches(
+        'select[name$="-ingredient"]'
+    )) {
+        return;
+    }
+
+    if (!event.target.value) {
+        return;
+    }
+
+    const ingredientSelects = [
+        ...recipeTable.querySelectorAll(
+            'select[name$="-ingredient"]'
+        )
+    ];
+
+    const lastSelect =
+        ingredientSelects[ingredientSelects.length - 1];
+
+    if (event.target === lastSelect) {
+        addRecipeRow();
+    }
+});
+
+
+function openIngredientWindow() {
+    window.open(
+        "{% url 'inventory:ingredient_create' %}?popup=1",
+        "addIngredient",
+        "width=600,height=650"
+    );
+}
+
+
+/*
+ * Called by the New Ingredient popup.
+ */
+function addIngredientOption(id, name) {
+
+    const selects = document.querySelectorAll(
+        'select[name$="-ingredient"]'
+    );
+
+    selects.forEach(select => {
+        const option = document.createElement("option");
+
+        option.value = id;
+        option.textContent = name;
+
+        select.appendChild(option);
+    });
+
+    /*
+     * Put the newly-created ingredient into the first
+     * unused recipe row.
+     */
+    for (const select of selects) {
+        if (!select.value) {
+            select.value = id;
+
+            select.dispatchEvent(
+                new Event("change", { bubbles: true })
+            );
+
+            break;
+        }
+    }
+}
+</script>
 
 {% endblock %}

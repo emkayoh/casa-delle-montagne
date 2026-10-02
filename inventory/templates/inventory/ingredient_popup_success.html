@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Ingredient added</title>
+</head>
+
+<body>
+
+<script>
+    if (window.opener) {
+        window.opener.addIngredientOption(
+            "{{ ingredient.pk }}",
+            "{{ ingredient.name|escapejs }}"
+        );
+    }
+
+    window.close();
+</script>
+
+<p>
+    Ingredient added. You can close this window.
+</p>
+
+</body>
+</html>

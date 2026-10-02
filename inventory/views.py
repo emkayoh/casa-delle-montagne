@@ -1,5 +1,6 @@
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 
 from .forms import (
     IngredientForm,
@@ -10,14 +11,13 @@ from .models import Ingredient, Product
 
 
 def product_list(request):
-    products = Product.objects.filter(active=True).order_by("name")
+    products = Product.objects.all().order_by("name")
 
     return render(
         request,
         "inventory/product_list.html",
         {"products": products},
     )
-
 
 def product_create(request):
     product = Product()
@@ -90,7 +90,6 @@ def label_preview(request, pk):
             "recipe_ingredients__ingredient"
         ),
         pk=pk,
-        active=True,
     )
 
     recipe_ingredients = (
@@ -118,13 +117,22 @@ def ingredient_list(request):
         {"ingredients": ingredients},
     )
 
-
 def ingredient_create(request):
+    popup = request.GET.get("popup") == "1"
+
     if request.method == "POST":
         form = IngredientForm(request.POST)
 
         if form.is_valid():
-            form.save()
+            ingredient = form.save()
+
+            if popup:
+                return render(
+                    request,
+                    "inventory/ingredient_popup_success.html",
+                    {"ingredient": ingredient},
+                )
+
             return redirect("inventory:ingredient_list")
 
     else:
@@ -136,9 +144,9 @@ def ingredient_create(request):
         {
             "form": form,
             "title": "Add ingredient",
+            "popup": popup,
         },
     )
-
 
 def ingredient_edit(request, pk):
     ingredient = get_object_or_404(Ingredient, pk=pk)
@@ -165,3 +173,12 @@ def ingredient_edit(request, pk):
             "title": "Edit ingredient",
         },
     )
+
+@require_POST
+def product_toggle_active(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+
+    product.active = not product.active
+    product.save(update_fields=["active"])
+
+    return redirect("inventory:product_list")

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Products — Soapbook
+Products - Soapbook
 {% endblock %}
 
 {% block content %}
@@ -15,43 +15,62 @@ Products — Soapbook
 </div>
 
 {% if products %}
-    <table>
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Weight</th>
-                <th></th>
-            </tr>
-        </thead>
+<table>
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Weight</th>
+            <th></th>
+        </tr>
+    </thead>
 
-        <tbody>
-            {% for product in products %}
-                <tr>
-                    <td>{{ product.name }}</td>
+    <tbody>
+        {% for product in products %}
+        <tr class="{% if not product.active %}inactive{% endif %}">
+            <td>{{ product.name }}</td>
 
-                    <td>
-                        {% if product.nominal_weight_g %}
-                            {{ product.nominal_weight_g }} g
+            <td>
+                {% if product.nominal_weight_g %}
+                {{ product.nominal_weight_g }} g
+                {% endif %}
+            </td>
+
+            <td>
+                {% if product.active %}
+                <span class="status active">Active</span>
+                {% else %}
+                <span class="status inactive">Inactive</span>
+                {% endif %}
+            </td>
+
+            <td class="actions">
+                <a class="button-link" href="{% url 'inventory:product_edit' product.pk %}">
+                    Edit
+                </a>
+
+                <a class="button-link" href="{% url 'inventory:label_preview' product.pk %}">
+                    Label
+                </a>
+
+                <form method="post" action="{% url 'inventory:product_toggle_active' product.pk %}" class="inline-form">
+                    {% csrf_token %}
+
+                    <button type="submit" class="button-link">
+                        {% if product.active %}
+                        Make inactive
+                        {% else %}
+                        Make active
                         {% endif %}
-                    </td>
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
 
-                    <td>
-                        <a href="{% url 'inventory:product_edit' product.pk %}">
-                            Edit
-                        </a>
-
-                        &nbsp;
-
-                        <a href="{% url 'inventory:label_preview' product.pk %}">
-                            Label
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+</table>
 {% else %}
-    <p>No products have been added yet.</p>
+<p>No products have been added yet.</p>
 {% endif %}
 
 {% endblock %}

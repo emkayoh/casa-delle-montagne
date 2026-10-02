@@ -40,4 +40,10 @@ urlpatterns = [
         views.ingredient_edit,
         name="ingredient_edit",
     ),
+    path(
+    "products/<int:pk>/toggle-active/",
+    views.product_toggle_active,
+    name="product_toggle_active",
+    ),
 ]
+

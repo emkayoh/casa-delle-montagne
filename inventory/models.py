@@ -3,11 +3,13 @@ from django.db import models
 
 class Unit(models.TextChoices):
     GRAM = "g", "g"
-    KILOGRAM = "kg", "kg"
     MILLILITRE = "ml", "ml"
-    LITRE = "l", "l"
+    TEASPOON = "tsp", "tsp"
+    TABLESPOON = "tbsp", "tbsp"
     EACH = "each", "each"
-
+    KILOGRAM = "kg", "kg"
+    LITRE = "l", "l"
+        
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=200, unique=True)
