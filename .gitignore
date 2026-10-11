@@ -4,3 +4,9 @@ __pycache__/
 db.sqlite3
 .DS_Store
 .env
+logs/
+.soapbook.pid
+Casa.iconset/
+Casa.icns
+*.app/
+applet
